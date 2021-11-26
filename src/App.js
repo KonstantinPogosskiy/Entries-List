@@ -2,8 +2,7 @@ import React, {useState, useMemo} from 'react';
 import '../src/styles/App.css';
 import PostList from "./components/PostList";
 import PostForm from "./components/PostForm";
-import MySelect from "./components/UI/select/MySelect";
-import MyInput from "./components/UI/input/MyInput";
+import PostFilter from "./components/PostFilter";
 
 function App() {
     const [posts, setPosts] = useState([
@@ -23,20 +22,19 @@ function App() {
             description: 'The iPhone 8 features a 4.7-inch display with a resolution of 1334 by 750 with 326 pixels per inch and a 1400:1 contrast ratio, while the iPhone 8 Plus features a 5.5-inch display with a 1920 by 1080 resolution, 401 pixels per inch, and a 1300:1 contrast ratio.'
         }
     ])
-    const [selectedSort, setSelectedSort] = useState('')
-    const [searchQuery, setSearchQuery] = useState('')
+    const [filter, setFilter] = useState({sort: '', query: ''})
 
     const sortedPosts = useMemo(() => {
         console.log('occurred change state')
-        if(selectedSort) {
-            return [...posts].sort((a,b) => a[selectedSort].localeCompare(b[selectedSort]))
+        if(filter.sort) {
+            return [...posts].sort((a,b) => a[filter.sort].localeCompare(b[filter.sort]))
         }
         return posts;
-    }, [selectedSort, posts] )
+    }, [filter.sort, posts] )
 
     const sortedAndSearchedPosts = useMemo(() => {
-        return sortedPosts.filter((post) => post.title.toLowerCase().includes(searchQuery))
-    },[searchQuery, sortedPosts])
+        return sortedPosts.filter((post) => post.title.toLowerCase().includes(filter.query))
+    },[filter.query, sortedPosts])
 
     const createPost = (newPost) => {
         setPosts([...posts, newPost])
@@ -45,31 +43,12 @@ function App() {
     const removePost = (post) => {
         setPosts(posts.filter(p => p.id !== post.id))
     }
-const sortPosts = (sort) => {
-    setSelectedSort(sort)
-}
+
     return (
         <div className="App">
-            <PostForm
-                create={createPost}/>
-            <div>
-                <MyInput
-                    placeholder="Search"
-                    value={searchQuery}
-                    onChange={e => setSearchQuery(e.target.value)}
-                />
-                <MySelect
-                    value={selectedSort}
-                    onChange={sortPosts}
-                    defaultValue='Sort'
-                    options={[
-                    {value: 'title', name: 'by the name'},
-                    {value: 'description', name: 'by the description'}
-                ]} />
-            </div>
-            {posts.length !== 0
-                ? <PostList remove={removePost} posts={sortedAndSearchedPosts} title='Phones List'/>
-                : <div className='entries'>No entries...</div>
+            <PostForm create={createPost}/>
+            <PostFilter filter={filter} setFilter={setFilter} />
+            <PostList remove={removePost} posts={sortedAndSearchedPosts} title='Phones List'/>
             }
         </div>
     );
