@@ -3,6 +3,8 @@ import '../src/styles/App.css';
 import PostList from "./components/PostList";
 import PostForm from "./components/PostForm";
 import PostFilter from "./components/PostFilter";
+import MyModal from "./components/UI/MyModal/MyModal";
+import MyButton from "./components/UI/button/MyButton";
 
 function App() {
     const [posts, setPosts] = useState([
@@ -23,6 +25,7 @@ function App() {
         }
     ])
     const [filter, setFilter] = useState({sort: '', query: ''})
+    const [modal, setModal] = useState(false)
 
     const sortedPosts = useMemo(() => {
         console.log('occurred change state')
@@ -46,10 +49,18 @@ function App() {
 
     return (
         <div className="App">
+            <MyButton
+                onClick={() => setModal(true)}
+                style={{marginTop: 30}}
+            >
+
+                Create entry
+            </MyButton>
+            <MyModal visible={modal} setVisible={setModal}>
             <PostForm create={createPost}/>
+            </MyModal>
             <PostFilter filter={filter} setFilter={setFilter} />
             <PostList remove={removePost} posts={sortedAndSearchedPosts} title='Phones List'/>
-            }
         </div>
     );
 }
