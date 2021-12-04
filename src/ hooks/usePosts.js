@@ -9,7 +9,7 @@ export const useSortedPosts = (posts, sort) => {
     }, [sort, posts])
 
     return sortedPosts;
-}
+};
 
 export const usePosts = (posts, sort, query) => {
     const sortedPosts = useSortedPosts(posts, sort)
@@ -19,4 +19,4 @@ export const usePosts = (posts, sort, query) => {
     },[query, sortedPosts])
 
     return sortedAndSearchedPosts;
-}
+};

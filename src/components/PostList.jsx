@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import PostItem from "./PostItem";
 import TransitionGroup from "react-transition-group/cjs/TransitionGroup";
 import CSSTransition from "react-transition-group/cjs/CSSTransition";
